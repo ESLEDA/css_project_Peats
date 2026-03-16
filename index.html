@@ -9,7 +9,7 @@
 <body>
     <div class="banner">
 
-        
+        <!-- Estrellas decorativas -->
         <svg class="sparkle" style="top:10%;left:5%;width:30px" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M14 0L15.8 12.2L28 14L15.8 15.8L14 28L12.2 15.8L0 14L12.2 12.2Z" fill="#25283B"/>
         </svg>
@@ -29,33 +29,54 @@
             <path d="M14 0L15.8 12.2L28 14L15.8 15.8L14 28L12.2 15.8L0 14L12.2 12.2Z" fill="#25283B"/>
         </svg>
 
-        
+        <!-- SLIDER -->
+        <!-- data-id corresponde al id del dragón en dragons[] de script.js -->
         <div class="slider" style="--quantity: 10">
-            <div class="item" style="--position: 1"><img src="img/dragon-01.png" alt="Dragon 1"></div>
-            <div class="item" style="--position: 2"><img src="img/dragon-02.png" alt="Dragon 2"></div>
-            <div class="item" style="--position: 3"><img src="img/dragon-03.png" alt="Dragon 3"></div>
-            <div class="item" style="--position: 4"><img src="img/dragon-04.png" alt="Dragon 4"></div>
-            <div class="item" style="--position: 5"><img src="img/dragon-05.png" alt="Dragon 5"></div>
-            <div class="item" style="--position: 6"><img src="img/dragon-06.png" alt="Dragon 6"></div>
-            <div class="item" style="--position: 7"><img src="img/dragon07.png" alt="Dragon 7"></div>
-            <div class="item" style="--position: 8"><img src="img/dragon-08.png" alt="Dragon 8"></div>
-            <div class="item" style="--position: 9"><img src="img/dargon-09.png" alt="Dragon 9"></div>
-            <div class="item" style="--position: 10"><img src="img/dragon-10.png" alt="Dragon 10"></div>
+            <div class="item" style="--position: 1"  data-id="1"><img src="img/dragon-01.png" alt="Dragon 1"></div>
+            <div class="item" style="--position: 2"  data-id="2"><img src="img/dragon-02.png" alt="Dragon 2"></div>
+            <div class="item" style="--position: 3"  data-id="3"><img src="img/dragon-03.png" alt="Dragon 3"></div>
+            <div class="item" style="--position: 4"  data-id="4"><img src="img/dragon-04.png" alt="Dragon 4"></div>
+            <div class="item" style="--position: 5"  data-id="5"><img src="img/dragon-05.png" alt="Dragon 5"></div>
+            <div class="item" style="--position: 6"  data-id="6"><img src="img/dragon-06.png" alt="Dragon 6"></div>
+            <div class="item" style="--position: 7"  data-id="7"><img src="img/dragon07.png" alt="Dragon 7"></div>
+            <div class="item" style="--position: 8"  data-id="8"><img src="img/dragon-08.png" alt="Dragon 8"></div>
+            <div class="item" style="--position: 9"  data-id="9"><img src="img/dargon-09.png" alt="Dragon 9"></div>
+            <div class="item" style="--position: 10" data-id="10"><img src="img/dragon-10.png" alt="Dragon 10"></div>
         </div>
 
-       
+        <!-- CONTENIDO -->
         <div class="content">
-            <h1 data-content="">I´m ESLEDA</h1>
+            
+            <h1>
+                <span class="h1-static">I´m </span><span class="h1-typed" id="typeTarget"></span><span class="cursor">|</span>
+            </h1>
             <div class="author">
                 <h2>Esleda</h2>
                 <p><b>Python Developer</b></p>
-                <p>
-                    Hi, my name is ESLEDA also I live in Chiapas.
-                </p>
+                <p>Hi, my name is ESLEDA also I live in Chiapas.</p>
             </div>
             <div class="model"></div>
         </div>
 
+        <!-- PANEL DE INFORMACIÓN DEL DRAGÓN (oculto por defecto) -->
+        <div class="dragon-panel" id="dragonPanel">
+            <button class="panel-close" id="panelClose" aria-label="Cerrar">✕</button>
+            <div class="panel-img-wrap">
+                <img id="panelImg" src="" alt="">
+            </div>
+            <div class="panel-body">
+                <p class="panel-tag" id="panelTag">Elemento</p>
+                <h3 class="panel-name" id="panelName">Nombre</h3>
+                <p class="panel-origin" id="panelOrigin">Origen</p>
+                <p class="panel-desc" id="panelDesc">Descripción</p>
+                <ul class="panel-stats" id="panelStats"></ul>
+            </div>
+        </div>
+        <!-- Overlay oscuro detrás del panel -->
+        <div class="panel-overlay" id="panelOverlay"></div>
+
     </div>
+
+    <script src="script.js"></script>
 </body>
 </html>

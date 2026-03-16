@@ -11,13 +11,15 @@ body {
     background: #d6d3cc;
 }
 
+/* ══════════════════════════════════════════════
+   BANNER / FONDO
+   ══════════════════════════════════════════════ */
 .banner {
     width: 100%;
     height: 100vh;
     text-align: center;
     overflow: hidden;
     position: relative;
-    /* Fondo gris cálido con grid sutil igual a la referencia */
     background-color: #d6d3cc;
     background-image:
         linear-gradient(rgba(100,98,90,0.2) 1px, transparent 1px),
@@ -25,7 +27,19 @@ body {
     background-size: 60px 60px;
 }
 
-/* ── SLIDER 3D ── */
+/* ══════════════════════════════════════════════
+   SPARKLES
+   ══════════════════════════════════════════════ */
+.sparkle {
+    position: absolute;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.5;
+}
+
+/* ══════════════════════════════════════════════
+   SLIDER 3D
+   ══════════════════════════════════════════════ */
 .banner .slider {
     position: absolute;
     width: 160px;
@@ -39,12 +53,8 @@ body {
 }
 
 @keyframes autoRun {
-    from {
-        transform: perspective(1000px) rotateX(-16deg) rotateY(0deg);
-    }
-    to {
-        transform: perspective(1000px) rotateX(-16deg) rotateY(360deg);
-    }
+    from { transform: perspective(1000px) rotateX(-16deg) rotateY(0deg); }
+    to   { transform: perspective(1000px) rotateX(-16deg) rotateY(360deg); }
 }
 
 .banner .slider .item {
@@ -55,17 +65,28 @@ body {
         translateZ(420px);
     border-radius: 4px;
     overflow: hidden;
-    /* Sombra para dar profundidad a las cards */
     filter: drop-shadow(0 12px 28px rgba(0,0,0,0.45));
+    /* Cursor pointer para indicar que es clickeable */
+    cursor: pointer;
+    transition: filter 0.2s ease, transform 0.2s ease;
+}
+
+/* Hover sutil en las cards */
+.banner .slider .item:hover {
+    filter: drop-shadow(0 16px 36px rgba(0,0,0,0.65)) brightness(1.08);
 }
 
 .banner .slider .item img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    pointer-events: none;
+    display: block;
 }
 
-/* ── CONTENIDO ── */
+/* ══════════════════════════════════════════════
+   CONTENIDO INFERIOR
+   ══════════════════════════════════════════════ */
 .banner .content {
     position: absolute;
     bottom: 0;
@@ -81,7 +102,7 @@ body {
     z-index: 1;
 }
 
-/* clamp() para que el H1 no se recorte en ningún ancho de pantalla */
+/* ── H1 con typewriter ── */
 .banner .content h1 {
     font-family: 'ICA Rubrik', sans-serif;
     font-size: clamp(5rem, 14vw, 15rem);
@@ -89,17 +110,42 @@ body {
     color: #25283B;
     position: relative;
     user-select: none;
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
 }
 
-.banner .content h1::after {
-    position: absolute;
-    inset: 0;
-    content: attr(data-content);
-    z-index: 2;
-    -webkit-text-stroke: 2px rgba(160,157,148,0.7);
-    color: transparent;
+.h1-static {
+    /* La parte "I´m " permanece siempre visible */
+    display: inline;
 }
 
+.h1-typed {
+    /* Las letras de "ESLEDA" aparecen una a una */
+    display: inline;
+}
+
+/* Cursor parpadeante que aparece tras el texto animado */
+.cursor {
+    display: inline-block;
+    font-weight: 300;
+    color: #25283B;
+    margin-left: 4px;
+    opacity: 1;
+    /* Parpadeo solo se activa cuando JS añade .blink */
+    transition: opacity 0.1s;
+}
+
+.cursor.blink {
+    animation: blink 0.9s step-start infinite;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0; }
+}
+
+/* ── Author ── */
 .banner .content .author {
     font-family: 'Poppins', sans-serif;
     text-align: right;
@@ -129,9 +175,7 @@ body {
     margin-bottom: 4px;
 }
 
-/* ── MODELO CENTRAL ──
-   z-index: 3 → queda POR ENCIMA del slider (z-index: 2)
-   creando el efecto de profundidad de la referencia      */
+/* ── Modelo central ── */
 .banner .content .model {
     background-image: url(img/warrior.png);
     width: 100%;
@@ -143,6 +187,183 @@ body {
     background-repeat: no-repeat;
     background-position: top center;
     z-index: 3;
-    /* Integra la figura con el fondo cálido */
     mix-blend-mode: multiply;
+    pointer-events: none;
+}
+
+/* ══════════════════════════════════════════════
+   OVERLAY (fondo oscuro detrás del panel)
+══════════════════════════════════════════════ */
+.panel-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0);
+    z-index: 100;
+    pointer-events: none;
+    transition: background 0.35s ease;
+}
+
+.panel-overlay.open {
+    background: rgba(0,0,0,0.45);
+    pointer-events: all;
+}
+
+/* ══════════════════════════════════════════════
+   PANEL DE INFORMACIÓN DEL DRAGÓN
+   Aparece desde la derecha con slide-in
+   ══════════════════════════════════════════════ */
+.dragon-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: min(380px, 100vw);
+    height: 100vh;
+    background: #1a1c2a;
+    z-index: 101;
+    overflow-y: auto;
+    transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+}
+
+.dragon-panel.open {
+    transform: translateX(0);
+}
+
+/* ── Imagen grande en el panel ── */
+.panel-img-wrap {
+    width: 100%;
+    height: 260px;
+    overflow: hidden;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.panel-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+}
+
+.dragon-panel.open .panel-img-wrap img {
+    transform: scale(1.04);
+}
+
+/* ── Cuerpo del panel ── */
+.panel-body {
+    padding: 24px 28px 40px;
+    flex: 1;
+}
+
+/* Badge de elemento */
+.panel-tag {
+    display: inline-block;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #c8b97a;
+    border: 1px solid #c8b97a;
+    border-radius: 20px;
+    padding: 3px 12px;
+    margin-bottom: 10px;
+}
+
+.panel-name {
+    font-family: 'ICA Rubrik', sans-serif;
+    font-size: 2.8rem;
+    color: #f0ece0;
+    letter-spacing: 2px;
+    line-height: 1;
+    margin-bottom: 6px;
+}
+
+.panel-origin {
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.75rem;
+    color: #8a8a9a;
+    margin-bottom: 16px;
+    font-style: italic;
+}
+
+.panel-desc {
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.85rem;
+    line-height: 1.7;
+    color: #c8c4d4;
+    margin-bottom: 24px;
+}
+
+/* ── Estadísticas ── */
+.panel-stats {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.panel-stats li {
+    display: grid;
+    grid-template-columns: 80px 1fr 36px;
+    align-items: center;
+    gap: 10px;
+}
+
+.stat-label {
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.72rem;
+    color: #8a8a9a;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.stat-bar-bg {
+    height: 6px;
+    background: #2e3045;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.stat-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #c8b97a, #e8d898);
+    border-radius: 3px;
+    width: 0%;
+    transition: width 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.stat-val {
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #c8b97a;
+    text-align: right;
+}
+
+/* ── Botón de cerrar ── */
+.panel-close {
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    background: rgba(255,255,255,0.08);
+    border: none;
+    color: #f0ece0;
+    font-size: 1rem;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    transition: background 0.2s;
+}
+
+.panel-close:hover {
+    background: rgba(255,255,255,0.18);
 }

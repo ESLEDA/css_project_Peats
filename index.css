@@ -1,0 +1,148 @@
+@import url('https://fonts.cdnfonts.com/css/ica-rubrik-black');
+@import url('https://fonts.cdnfonts.com/css/poppins');
+
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #d6d3cc;
+}
+
+.banner {
+    width: 100%;
+    height: 100vh;
+    text-align: center;
+    overflow: hidden;
+    position: relative;
+    /* Fondo gris cálido con grid sutil igual a la referencia */
+    background-color: #d6d3cc;
+    background-image:
+        linear-gradient(rgba(100,98,90,0.2) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(100,98,90,0.2) 1px, transparent 1px);
+    background-size: 60px 60px;
+}
+
+/* ── SLIDER 3D ── */
+.banner .slider {
+    position: absolute;
+    width: 160px;
+    height: 200px;
+    top: 8%;
+    left: calc(50% - 80px);
+    transform-style: preserve-3d;
+    transform: perspective(1000px);
+    animation: autoRun 20s linear infinite;
+    z-index: 2;
+}
+
+@keyframes autoRun {
+    from {
+        transform: perspective(1000px) rotateX(-16deg) rotateY(0deg);
+    }
+    to {
+        transform: perspective(1000px) rotateX(-16deg) rotateY(360deg);
+    }
+}
+
+.banner .slider .item {
+    position: absolute;
+    inset: 0;
+    transform:
+        rotateY(calc((var(--position) - 1) * (360 / var(--quantity)) * 1deg))
+        translateZ(420px);
+    border-radius: 4px;
+    overflow: hidden;
+    /* Sombra para dar profundidad a las cards */
+    filter: drop-shadow(0 12px 28px rgba(0,0,0,0.45));
+}
+
+.banner .slider .item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* ── CONTENIDO ── */
+.banner .content {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(1400px, 100vw);
+    height: max-content;
+    padding: 0 60px 80px 60px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+    z-index: 1;
+}
+
+/* clamp() para que el H1 no se recorte en ningún ancho de pantalla */
+.banner .content h1 {
+    font-family: 'ICA Rubrik', sans-serif;
+    font-size: clamp(5rem, 14vw, 15rem);
+    line-height: 0.9em;
+    color: #25283B;
+    position: relative;
+    user-select: none;
+}
+
+.banner .content h1::after {
+    position: absolute;
+    inset: 0;
+    content: attr(data-content);
+    z-index: 2;
+    -webkit-text-stroke: 2px rgba(160,157,148,0.7);
+    color: transparent;
+}
+
+.banner .content .author {
+    font-family: 'Poppins', sans-serif;
+    text-align: right;
+    max-width: 220px;
+    margin-right: 10px;
+    margin-bottom: 8px;
+}
+
+.banner .content h2 {
+    font-family: 'ICA Rubrik', sans-serif;
+    font-size: 2.8em;
+    color: #25283B;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+}
+
+.banner .content .author p {
+    font-size: 0.82rem;
+    line-height: 1.6;
+    color: #4a4a4a;
+}
+
+.banner .content .author p b {
+    font-size: 0.95rem;
+    color: #25283B;
+    display: block;
+    margin-bottom: 4px;
+}
+
+/* ── MODELO CENTRAL ──
+   z-index: 3 → queda POR ENCIMA del slider (z-index: 2)
+   creando el efecto de profundidad de la referencia      */
+.banner .content .model {
+    background-image: url(img/warrior.png);
+    width: 100%;
+    height: 78vh;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    background-size: auto 130%;
+    background-repeat: no-repeat;
+    background-position: top center;
+    z-index: 3;
+    /* Integra la figura con el fondo cálido */
+    mix-blend-mode: multiply;
+}

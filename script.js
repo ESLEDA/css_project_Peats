@@ -1,13 +1,11 @@
 /* ============================================================
    script.js — Dragon Slider
-   • Efecto typewriter en el título "I´m ESLEDA"
+   • Efecto typewriter en loop: escribe → espera → borra → repite
    • Panel de información al hacer clic en una card del slider
    ============================================================ */
 
 /* ──────────────────────────────────────────────
    1. DATOS DE LOS DRAGONES
-   Edita nombre, origen, descripción y stats
-   de cada dragón según tus imágenes reales.
    ────────────────────────────────────────────── */
 const dragons = {
     1:  {
@@ -51,10 +49,10 @@ const dragons = {
     },
     4:  {
         name: "Thalassor",
-        tag: "🌊 Agua",
-        origin: "Abismo de Coral Negro",
+        tag: "🔥 Fuego",
+        origin: "Abismo de Volcán tacana",
         img: "img/dragon-04.png",
-        desc: "Señor de las profundidades oceánicas. Puede invocar tsunamis con el movimiento de su cola y respirar bajo el agua indefinidamente.",
+        desc: "Señor de las lavas ede chiapas. Puede provocar temblores ",
         stats: [
             { label: "Fuerza",    value: 80 },
             { label: "Velocidad", value: 75 },
@@ -92,7 +90,7 @@ const dragons = {
         name: "Noctivex",
         tag: "🌑 Sombra",
         origin: "Reino de las Sombras Eternas",
-        img: "img/dragon-07.png",
+        img: "img/dragon07.png",
         desc: "Dragón de la oscuridad absoluta. Puede volverse invisible a voluntad y su mordida drena la energía vital de sus presas.",
         stats: [
             { label: "Fuerza",    value: 88 },
@@ -118,7 +116,7 @@ const dragons = {
         name: "Terraxis",
         tag: "🪨 Tierra",
         origin: "Montañas de Piedra Viva",
-        img: "img/dragon-09.png",
+        img: "img/dargon-09.png",
         desc: "El coloso de piedra viviente. Terraxis puede fundir su cuerpo con la roca para aparecer sin ser detectado y su pisada provoca terremotos.",
         stats: [
             { label: "Fuerza",    value: 98 },
@@ -144,41 +142,78 @@ const dragons = {
 
 
 /* ──────────────────────────────────────────────
-   2. EFECTO TYPEWRITER
-   Escribe "ESLEDA" letra a letra al cargar
-   la página; al terminar el cursor parpadea.
+   2. EFECTO TYPEWRITER EN LOOP
+   Ciclo completo cada ~6 segundos:
+     - Escribe "ESLEDA" letra a letra (120ms/letra)
+     - Pausa visible 3 s
+     - Borra letra a letra (80ms/letra)
+     - Pausa corta 400ms
+     - Vuelve a escribir → repite
    ────────────────────────────────────────────── */
 (function initTypewriter() {
     const target   = document.getElementById("typeTarget");
     const cursor   = document.querySelector(".cursor");
-    const fullText = "ESLEDA";
-    let   index    = 0;
+    const fullText = " ESLEDA";
 
-    // Pequeña pausa inicial antes de empezar a escribir
-    setTimeout(function type() {
-        if (index < fullText.length) {
-            target.textContent += fullText[index];
-            index++;
-            setTimeout(type, 120);          // velocidad: 120 ms por letra
-        } else {
-            // Al terminar, el cursor sigue parpadeando (via CSS)
-            cursor.classList.add("blink");
+    const WRITE_SPEED  = 120;   // ms por letra al escribir
+    const DELETE_SPEED = 80;    // ms por letra al borrar
+    const PAUSE_AFTER  = 3000;  // ms de pausa con texto completo (dentro del ciclo de 6s)
+    const PAUSE_EMPTY  = 400;   // ms de pausa con texto vacío antes de reescribir
+
+    /* El cursor parpadea siempre */
+    cursor.classList.add("blink");
+
+    function writeText(cb) {
+        let i = 0;
+        function step() {
+            if (i < fullText.length) {
+                target.textContent = fullText.slice(0, ++i);
+                setTimeout(step, WRITE_SPEED);
+            } else {
+                cb();
+            }
         }
-    }, 800);
+        step();
+    }
+
+    function deleteText(cb) {
+        let i = fullText.length;
+        function step() {
+            if (i > 0) {
+                target.textContent = fullText.slice(0, --i);
+                setTimeout(step, DELETE_SPEED);
+            } else {
+                cb();
+            }
+        }
+        step();
+    }
+
+    function loop() {
+        writeText(() => {
+            // Pausa con texto completo
+            setTimeout(() => {
+                deleteText(() => {
+                    // Pausa con texto vacío
+                    setTimeout(loop, PAUSE_EMPTY);
+                });
+            }, PAUSE_AFTER);
+        });
+    }
+
+    // Pequeña pausa inicial antes del primer ciclo
+    setTimeout(loop, 600);
 })();
 
 
 /* ──────────────────────────────────────────────
    3. PANEL DE INFORMACIÓN
-   Click en cualquier .item abre el panel lateral
-   con los datos del dragón seleccionado.
    ────────────────────────────────────────────── */
 (function initPanel() {
-    const panel   = document.getElementById("dragonPanel");
-    const overlay = document.getElementById("panelOverlay");
+    const panel    = document.getElementById("dragonPanel");
+    const overlay  = document.getElementById("panelOverlay");
     const btnClose = document.getElementById("panelClose");
 
-    // Referencias a los elementos del panel
     const elImg    = document.getElementById("panelImg");
     const elTag    = document.getElementById("panelTag");
     const elName   = document.getElementById("panelName");
@@ -186,19 +221,17 @@ const dragons = {
     const elDesc   = document.getElementById("panelDesc");
     const elStats  = document.getElementById("panelStats");
 
-    /* Abre el panel con los datos del dragón */
     function openPanel(id) {
         const d = dragons[id];
         if (!d) return;
 
-        elImg.src       = d.img;
-        elImg.alt       = d.name;
+        elImg.src            = d.img;
+        elImg.alt            = d.name;
         elTag.textContent    = d.tag;
         elName.textContent   = d.name;
         elOrigin.textContent = d.origin;
         elDesc.textContent   = d.desc;
 
-        // Generar barras de estadísticas
         elStats.innerHTML = d.stats.map(s => `
             <li>
                 <span class="stat-label">${s.label}</span>
@@ -212,7 +245,6 @@ const dragons = {
         panel.classList.add("open");
         overlay.classList.add("open");
 
-        // Animar las barras con un pequeño delay para el efecto visual
         requestAnimationFrame(() => {
             requestAnimationFrame(() => {
                 panel.querySelectorAll(".stat-bar-fill").forEach(bar => {
@@ -222,25 +254,16 @@ const dragons = {
         });
     }
 
-    /* Cierra el panel */
     function closePanel() {
         panel.classList.remove("open");
         overlay.classList.remove("open");
     }
 
-    /* Asignar click a cada item del slider */
     document.querySelectorAll(".slider .item").forEach(item => {
-        item.addEventListener("click", () => {
-            const id = parseInt(item.dataset.id, 10);
-            openPanel(id);
-        });
+        item.addEventListener("click", () => openPanel(parseInt(item.dataset.id, 10)));
     });
 
     btnClose.addEventListener("click", closePanel);
     overlay.addEventListener("click", closePanel);
-
-    /* Cerrar con tecla Escape */
-    document.addEventListener("keydown", e => {
-        if (e.key === "Escape") closePanel();
-    });
+    document.addEventListener("keydown", e => { if (e.key === "Escape") closePanel(); });
 })();

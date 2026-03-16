@@ -30,7 +30,6 @@
         </svg>
 
         <!-- SLIDER -->
-        <!-- data-id corresponde al id del dragón en dragons[] de script.js -->
         <div class="slider" style="--quantity: 10">
             <div class="item" style="--position: 1"  data-id="1"><img src="img/dragon-01.png" alt="Dragon 1"></div>
             <div class="item" style="--position: 2"  data-id="2"><img src="img/dragon-02.png" alt="Dragon 2"></div>
@@ -40,15 +39,14 @@
             <div class="item" style="--position: 6"  data-id="6"><img src="img/dragon-06.png" alt="Dragon 6"></div>
             <div class="item" style="--position: 7"  data-id="7"><img src="img/dragon07.png" alt="Dragon 7"></div>
             <div class="item" style="--position: 8"  data-id="8"><img src="img/dragon-08.png" alt="Dragon 8"></div>
-            <div class="item" style="--position: 9"  data-id="9"><img src="img/dargon-09.png" alt="Dragon 9"></div>
+            <div class="item" style="--position: 9"  data-id="9"><img src="img/dARgon-09.png" alt="Dragon 9"></div>
             <div class="item" style="--position: 10" data-id="10"><img src="img/dragon-10.png" alt="Dragon 10"></div>
         </div>
 
         <!-- CONTENIDO -->
         <div class="content">
-            
             <h1>
-                <span class="h1-static">I´m </span><span class="h1-typed" id="typeTarget"></span><span class="cursor">|</span>
+                <span class="h1-static">I´m&nbsp;</span><span class="h1-typed" id="typeTarget"> </span><span class="cursor">|</span>
             </h1>
             <div class="author">
                 <h2>Esleda</h2>
@@ -58,7 +56,7 @@
             <div class="model"></div>
         </div>
 
-        <!-- PANEL DE INFORMACIÓN DEL DRAGÓN (oculto por defecto) -->
+        <!-- PANEL DE INFORMACIÓN DEL DRAGÓN -->
         <div class="dragon-panel" id="dragonPanel">
             <button class="panel-close" id="panelClose" aria-label="Cerrar">✕</button>
             <div class="panel-img-wrap">
@@ -72,7 +70,6 @@
                 <ul class="panel-stats" id="panelStats"></ul>
             </div>
         </div>
-        <!-- Overlay oscuro detrás del panel -->
         <div class="panel-overlay" id="panelOverlay"></div>
 
     </div>
